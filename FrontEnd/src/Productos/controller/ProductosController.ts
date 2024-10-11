@@ -14,21 +14,16 @@ export default class ProductosController {
         
         // Inicializamos los eventos de la vista
         this.view.onDeleteProduct = this.handleDelete.bind(this);
-        this.view.onUpdateProduct = this.handleUpdate.bind(this);
+        this.view.onUpdateProduct =  this.handleUpdate.bind(this);
         this.view.onCreatedProduct = this.handleCreate.bind(this); // Agrega este método
     }
 
-    // Agregar el método handleCreate en el controlador
-    public async handleCreate(newProduct: Producto): Promise<void> {
-        console.log("Creando producto en el controlador:", newProduct); // Asegúrate de que los datos lleguen aquí correctamente
-        await this.model.createProducto(newProduct); // Crea el producto en el modelo
-        this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
-    }
+   
 
 
     public async init(): Promise<void> {
         await this.model.init();
-        this.view.init();
+        await  this.view.init();
         this.loadProductos();
         this.addPaginationEvents(); 
     }
@@ -97,5 +92,13 @@ export default class ProductosController {
         
         this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
     }   
+
+
+     // Agregar el método handleCreate en el controlador
+     public async handleCreate(newProduct: Producto): Promise<void> {
+        console.log("Creando producto en el controlador:", newProduct); // Asegúrate de que los datos lleguen aquí correctamente
+        await this.model.createProducto(newProduct); // Crea el producto en el modelo
+        this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
+    }
     
 }

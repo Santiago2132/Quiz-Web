@@ -18,23 +18,32 @@ export default class ProductosModel {
     async deleteProducto(id) {
         this.productos = this.productos.filter(producto => producto.id !== id);
         await this.deleteProductsServer(id);
+        await this.init();
     }
     async updateProducto(updatedProducto) {
         console.log(updatedProducto);
         const index = this.productos.findIndex(producto => producto.id === updatedProducto.id);
         if (index !== -1) {
+            const respuesta = await this.updateProductsServer(updatedProducto);
             this.productos[index] = updatedProducto; // Actualiza el producto en la lista
             console.log("Producto actualizado en el modelo:", this.productos[index]);
+            console.log(respuesta);
+            await this.init();
         }
         else {
             console.error("No se encontró el producto para actualizar.");
         }
-        await this.updateProductsServer(updatedProducto);
     }
     async createProducto(newProduct) {
-        console.log(newProduct);
-        this.productos.push(newProduct);
-        await this.addProductsServer(newProduct);
+        console.log(newProduct + 'PRODUCTO EN MODELO');
+        try {
+            await this.addProductsServer(newProduct);
+            this.productos.push(newProduct); // Agregar a la lista local si la creación es exitosa
+            await this.init();
+        }
+        catch (error) {
+            console.error("Error en createProducto:", error);
+        }
     }
     getProductsServer = async () => {
         const response = await fetch('http://localhost:1802/api/v1.0/productos');
@@ -46,23 +55,30 @@ export default class ProductosModel {
         return data;
     };
     addProductsServer = async (producto) => {
-        const response = await fetch('http://localhost:1802/api/v1.0/productos/agregar', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(producto),
-        });
-        if (response.status !== 200) {
+        try {
+            const response = await fetch('http://localhost:1802/api/v1.0/productos/nuevo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(producto),
+            });
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return null;
+            }
+            const data = await response.json();
+            console.log(data);
+            return JSON.stringify(data);
+        }
+        catch (error) {
+            console.error("Error en addProductsServer:", error);
             return null;
         }
-        const data = await response.json();
-        console.log(data);
-        return data;
     };
     deleteProductsServer = async (idProducto) => {
         const response = await fetch('http://localhost:1802/api/v1.0/productos/eliminar', {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -77,7 +93,7 @@ export default class ProductosModel {
     };
     updateProductsServer = async (producto) => {
         const response = await fetch('http://localhost:1802/api/v1.0/productos/actualizar', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },

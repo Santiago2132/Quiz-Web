@@ -137,6 +137,7 @@ export default class ProductosView {
             }
         };
     }
+    ;
     // Cambiar en ProductosView
     handleUpdate(id) {
         console.log(`Actualizando producto con ID: ${id}`);
