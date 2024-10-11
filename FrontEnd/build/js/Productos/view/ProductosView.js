@@ -61,8 +61,8 @@ export default class ProductosView {
     updatePaginator(isFirst, isLast) {
         const prevButton = document.getElementById("prev");
         const nextButton = document.getElementById("next");
-        prevButton.disabled = isFirst;
-        nextButton.disabled = isLast;
+        prevButton.disabled = false;
+        nextButton.disabled = false;
         if (isFirst) {
             this.showErrorModal("Error: No puedes retroceder más.");
         }

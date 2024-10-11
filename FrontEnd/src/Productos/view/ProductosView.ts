@@ -81,8 +81,8 @@ export default class ProductosView {
         const prevButton = document.getElementById("prev") as HTMLButtonElement;
         const nextButton = document.getElementById("next") as HTMLButtonElement;
 
-        prevButton.disabled = isFirst;
-        nextButton.disabled = isLast;
+        prevButton.disabled = false;
+        nextButton.disabled = false;
         if (isFirst) {
             this.showErrorModal("Error: No puedes retroceder más.");
         } else if (isLast) {
@@ -164,8 +164,7 @@ export default class ProductosView {
             if (newProduct) {
                 this.onCreatedProduct(newProduct); // Llama al método de creación
             }
-        };   
->>>>>>> e142e5e085fbaec2ce382c24019b46a6a47f62c3
+        }
     }
 
     // Cambiar en ProductosView

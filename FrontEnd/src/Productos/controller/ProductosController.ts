@@ -62,18 +62,27 @@ export default class ProductosController {
     private addPaginationEvents(): void {
         const prevButton = document.getElementById("prev") as HTMLButtonElement;
         const nextButton = document.getElementById("next") as HTMLButtonElement;
-
+    
         prevButton.addEventListener("click", () => {
-            this.currentIndex = (this.currentIndex > 0) ? this.currentIndex - 1 : this.model.getProductos().length - 1;
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+            } else {
+                this.currentIndex = this.model.getProductos().length - 1; 
+            }
             this.loadProducto();
         });
-
+    
         nextButton.addEventListener("click", () => {
             const productos = this.model.getProductos();
-            this.currentIndex = (this.currentIndex < productos.length - 1) ? this.currentIndex + 1 : 0;
+            if (this.currentIndex < productos.length - 1) {
+                this.currentIndex++;
+            } else {
+                this.currentIndex = 0; 
+            }
             this.loadProducto();
         });
     }
+    
 
     public async handleDelete(id: number): Promise<void> {
         console.log(`Recibido ID para eliminar: ${id}`);
