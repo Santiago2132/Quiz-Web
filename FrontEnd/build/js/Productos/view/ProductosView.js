@@ -118,27 +118,26 @@ export default class ProductosView {
             });
         }
     }
-    // Función para manejar el botón "create"
+    // Cambiar en ProductosView
     handleCreate(producto) {
         console.log("Producto creado:", producto);
         const saveButton = document.getElementById("save");
         saveButton.classList.remove("visually-hidden");
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleCreate1(); // Llama a handleCreate aquí
-            });
-        }
+        saveButton.onclick = () => {
+            const newProduct = this.handleCreate1(); // Obtener los datos del nuevo producto
+            if (newProduct) {
+                this.onCreatedProduct(newProduct); // Llama al método de creación
+            }
+        };
     }
-    // Función para manejar el enlace "update"
+    // Cambiar en ProductosView
     handleUpdate(id) {
         console.log(`Actualizando producto con ID: ${id}`);
         const saveButton = document.getElementById("save");
         saveButton.classList.remove("visually-hidden");
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleSave(); // Llama a handleCreate aquí
-            });
-        }
+        saveButton.onclick = () => {
+            this.handleSave(); // Llama a handleSave para guardar los cambios
+        };
     }
     // Función para manejar el enlace "delete"
     handleDelete(id) {

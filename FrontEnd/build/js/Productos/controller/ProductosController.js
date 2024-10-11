@@ -2,12 +2,20 @@ export default class ProductosController {
     model;
     view;
     currentIndex = 0;
+    // Cambiar en ProductosController
     constructor(model, view) {
         this.model = model;
         this.view = view;
         // Inicializamos los eventos de la vista
         this.view.onDeleteProduct = this.handleDelete.bind(this);
         this.view.onUpdateProduct = this.handleUpdate.bind(this);
+        this.view.onCreatedProduct = this.handleCreate.bind(this); // Agrega este método
+    }
+    // Agregar el método handleCreate en el controlador
+    async handleCreate(newProduct) {
+        console.log("Creando producto en el controlador:", newProduct); // Asegúrate de que los datos lleguen aquí correctamente
+        await this.model.createProducto(newProduct); // Crea el producto en el modelo
+        this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
     }
     async init() {
         await this.model.init();
@@ -54,11 +62,6 @@ export default class ProductosController {
     async handleUpdate(updatedProducto) {
         console.log("Actualizando producto en el controlador:", updatedProducto); // Asegúrate de que los datos lleguen aquí correctamente
         await this.model.updateProducto(updatedProducto); // Actualiza el modelo con los nuevos datos
-        this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
-    }
-    async handleCreate(updatedProducto) {
-        console.log("creando producto en el controlador:", updatedProducto); // Asegúrate de que los datos lleguen aquí correctamente
-        await this.model.createProducto(updatedProducto); // Actualiza el modelo con los nuevos datos
         this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
     }
 }
