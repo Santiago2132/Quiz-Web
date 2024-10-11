@@ -16,7 +16,7 @@ export default class ProductsView {
     )
 
     this.router.post(
-      '/agregar',
+      '/nuevo',
       this.productController.agregarProducto.bind(this.productController)
     )
 

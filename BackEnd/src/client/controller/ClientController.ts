@@ -4,7 +4,7 @@ import path from 'path'
 export default class ClientController {
   public index = (_req: Request, res: Response): void => {
     res.status(200).sendFile(
-      path.resolve(__dirname, '../public/html-css/index.html')
+      path.resolve(__dirname, '../public/build/index.html')
     )
   }
 

@@ -1,7 +1,6 @@
 import cors from 'cors'
 import express, { Application } from 'express'
 import ProductsView from '../Products/view/ProductsView'
-import ClientView from '../client/view/ClientView'
 import path from 'path'
 
 export default class Server {
@@ -10,7 +9,6 @@ export default class Server {
 
   constructor(
     private readonly productView: ProductsView,
-    private readonly clientView: ClientView,
   ) {
     this.app = express() 
     this.statics()   
@@ -32,8 +30,7 @@ export default class Server {
 
   public routes = (): void => {
     this.app.use('/api/v1.0/productos', cors(), this.productView.router)
-    this.app.use('/', cors(), this.clientView.router)
-    this.app.use('*', cors(), this.clientView.router)
+
   }
 
   public start = (): void => {
