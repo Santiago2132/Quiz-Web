@@ -164,7 +164,12 @@ export default class ProductosView {
             if (newProduct) {
                 this.onCreatedProduct(newProduct); // Llama al método de creación
             }
+<<<<<<< HEAD
         }
+=======
+        };   
+
+>>>>>>> e8781029f1e0885d806f5f04875a53d0215839bf
     }
 
     // Cambiar en ProductosView
