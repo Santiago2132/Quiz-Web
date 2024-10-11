@@ -25,7 +25,6 @@ export default class ProductosController {
 
     private loadProductos(): void {
       const productos = this.model.getProductos();
-      console.log(productos);
   
       if (productos.length > 0) {
           this.view.renderProductos(productos); // Ahora este método existe
@@ -78,7 +77,16 @@ export default class ProductosController {
         await this.model.updateProducto(updatedProducto); // Actualiza el modelo con los nuevos datos
         
         this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
+    }   
+    
+    public async handleCreate(updatedProducto: Producto): Promise<void> {
+        console.log("creando producto en el controlador:", updatedProducto); // Asegúrate de que los datos lleguen aquí correctamente
+        
+        await this.model.createProducto(updatedProducto); // Actualiza el modelo con los nuevos datos
+        
+        this.loadProductos(); // Recarga los productos para reflejar los cambios en la vista
     }    
+    
     
     
 }

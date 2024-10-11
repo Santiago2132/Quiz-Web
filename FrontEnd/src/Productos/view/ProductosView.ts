@@ -1,8 +1,9 @@
-import Producto from "../types/Producto";
+import Producto from "../types/Producto.js";
 
 export default class ProductosView {
     public onDeleteProduct: (id: number) => Promise<void> = async () => {};
     public onUpdateProduct: (updatedProducto: Producto) => Promise<void> = async () => {};
+    public onCreatedProduct: (createdProducto: Producto) => Promise<void> = async () => {};
 
     constructor() {
         this.init();
@@ -19,7 +20,7 @@ export default class ProductosView {
     private addEventListeners(): void {
         const deleteLink = document.getElementById("del") as HTMLAnchorElement;
         const updateLink = document.getElementById("update") as HTMLAnchorElement;
-        const saveButton = document.getElementById("save") as HTMLButtonElement; 
+        const createLink = document.getElementById("create") as HTMLAnchorElement;
     
         if (deleteLink) {
             deleteLink.addEventListener("click", () => {
@@ -35,16 +36,14 @@ export default class ProductosView {
             });
         }
     
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleCreate(saveButton); // Llama a handleCreate aquí
+        if (createLink) {
+            createLink.addEventListener("click", () => {
+                const producto= this.handleCreate1()
+                this.handleCreate(producto); // Llama al método de actualización con el ID
             });
         }
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleSave(); // Llama a la nueva función de guardar
-            });
-        }
+        
+        
         
     }
     
@@ -57,12 +56,15 @@ export default class ProductosView {
         this.onUpdateProduct(updatedProducto);
     }
 
+    public handleCreateButton(creratedProducto: Producto): void {
+        this.onCreatedProduct(creratedProducto);
+    }
+
     public renderProductos(productos: Producto[]): void {
         productos.forEach((producto) => this.renderProducto(producto));
     }
 
     public renderProducto(producto: Producto): void {
-        console.log(producto);
         const form = document.getElementById("prods") as HTMLFormElement;
 
         (form.querySelector("#id") as HTMLInputElement).value = producto.id.toString();
@@ -143,17 +145,17 @@ export default class ProductosView {
     }
 
     // Función para manejar el botón "create"
-    private handleCreate(saveButton: HTMLButtonElement): void {
-        const form = document.getElementById("prods") as HTMLFormElement;
-        (form.querySelector("#id") as HTMLInputElement).value = ""; // Limpia todo
-        (form.querySelector("#title") as HTMLInputElement).value = "";
-        (form.querySelector("#description") as HTMLTextAreaElement).value = "";
-        (form.querySelector("#price") as HTMLInputElement).value = "";
-        (form.querySelector("#amount") as HTMLInputElement).value = "";
-        (form.querySelector("#discountper") as HTMLInputElement).value = "";
-        (form.querySelector("#discountuni") as HTMLInputElement).value = "";
-        (form.querySelector("#discount") as HTMLSelectElement).value = "false";
+    private handleCreate(producto:Producto): void {
+
+        console.log("Producto creado:", producto);
+        const saveButton = document.getElementById("save") as HTMLButtonElement;
         saveButton.classList.remove("visually-hidden");
+        if (saveButton) {
+            saveButton.addEventListener("click", () => {
+                this.handleCreate1(); // Llama a handleCreate aquí
+
+            });
+        }   
     }
 
     // Función para manejar el enlace "update"
@@ -162,6 +164,13 @@ export default class ProductosView {
         
         const saveButton = document.getElementById("save") as HTMLButtonElement;
         saveButton.classList.remove("visually-hidden");
+        if (saveButton) {
+            saveButton.addEventListener("click", () => {
+                this.handleSave(); // Llama a handleCreate aquí
+
+            });
+        }        
+        
     }
     
 
@@ -181,7 +190,8 @@ export default class ProductosView {
 
         console.log(`Producto con ID: ${id} eliminado.`);
     }
-    public handleSave(): void {
+
+    public handleSave():void {
         // Obtén los valores del formulario
         const form = document.getElementById("prods") as HTMLFormElement;
         
@@ -218,6 +228,43 @@ export default class ProductosView {
         } else {
             this.showErrorModal("Error: El ID o el título no son válidos.");
         }
+    }
+
+    public handleCreate1():Producto {
+        // Obtén los valores del formulario
+        const form = document.getElementById("prods") as HTMLFormElement;
+        
+        // Asegúrate de que el formulario tiene los campos correctos
+        const idField = form.querySelector("#id") as HTMLInputElement;
+        const titleField = form.querySelector("#title") as HTMLInputElement;
+        const descriptionField = form.querySelector("#description") as HTMLTextAreaElement;
+        const priceField = form.querySelector("#price") as HTMLInputElement;
+        const amountField = form.querySelector("#amount") as HTMLInputElement;
+        const discountPerField = form.querySelector("#discountper") as HTMLInputElement;
+        const discountUniField = form.querySelector("#discountuni") as HTMLInputElement;
+        const discountField = form.querySelector("#discount") as HTMLSelectElement;
+        const favoriteField = form.querySelector("#favorite") as HTMLSelectElement; // Campo opcional para "favorite"
+        const imgField = form.querySelector("#img") as HTMLInputElement; // Campo opcional para "img"
+        
+        // Convierte los valores del formulario en un objeto Producto
+        const updatedProducto: Producto = {
+            id: parseInt(idField.value, 10),
+            title: titleField.value,
+            description: descriptionField.value,
+            price: parseFloat(priceField.value),
+            amount: amountField.value,
+            discountPer: parseFloat(discountPerField.value),
+            discountUni: discountUniField.value,
+            discount: discountField.value === "true",
+            favorite: favoriteField ? favoriteField.value === "true" : false,
+            img: imgField ? imgField.value : ""
+        };
+
+        console.log("Producto capturado:", updatedProducto);
+        this.onCreatedProduct(updatedProducto); // Llama a la función del controlador
+        return updatedProducto
+        
+        
     }
     
     

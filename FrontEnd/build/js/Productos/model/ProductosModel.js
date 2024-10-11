@@ -19,6 +19,7 @@ export default class ProductosModel {
         this.productos = this.productos.filter(producto => producto.id !== id);
     }
     async updateProducto(updatedProducto) {
+        console.log(updatedProducto);
         const index = this.productos.findIndex(producto => producto.id === updatedProducto.id);
         if (index !== -1) {
             this.productos[index] = updatedProducto; // Actualiza el producto en la lista
@@ -27,5 +28,9 @@ export default class ProductosModel {
         else {
             console.error("No se encontró el producto para actualizar.");
         }
+    }
+    async createProducto(newProduct) {
+        console.log(newProduct);
+        this.productos.push(newProduct);
     }
 }

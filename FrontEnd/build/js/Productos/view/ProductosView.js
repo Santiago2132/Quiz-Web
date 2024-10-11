@@ -1,6 +1,7 @@
 export default class ProductosView {
     onDeleteProduct = async () => { };
     onUpdateProduct = async () => { };
+    onCreatedProduct = async () => { };
     constructor() {
         this.init();
         this.createErrorModal(); // Creamos el modal de error al inicializar la vista
@@ -13,7 +14,7 @@ export default class ProductosView {
     addEventListeners() {
         const deleteLink = document.getElementById("del");
         const updateLink = document.getElementById("update");
-        const saveButton = document.getElementById("save");
+        const createLink = document.getElementById("create");
         if (deleteLink) {
             deleteLink.addEventListener("click", () => {
                 const id = parseInt(document.getElementById("id").value, 10);
@@ -26,14 +27,10 @@ export default class ProductosView {
                 this.handleUpdate(id); // Llama al método de actualización con el ID
             });
         }
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleCreate(saveButton); // Llama a handleCreate aquí
-            });
-        }
-        if (saveButton) {
-            saveButton.addEventListener("click", () => {
-                this.handleSave(); // Llama a la nueva función de guardar
+        if (createLink) {
+            createLink.addEventListener("click", () => {
+                const producto = this.handleCreate1();
+                this.handleCreate(producto); // Llama al método de actualización con el ID
             });
         }
     }
@@ -44,11 +41,13 @@ export default class ProductosView {
     handleUpdateButton(updatedProducto) {
         this.onUpdateProduct(updatedProducto);
     }
+    handleCreateButton(creratedProducto) {
+        this.onCreatedProduct(creratedProducto);
+    }
     renderProductos(productos) {
         productos.forEach((producto) => this.renderProducto(producto));
     }
     renderProducto(producto) {
-        console.log(producto);
         const form = document.getElementById("prods");
         form.querySelector("#id").value = producto.id.toString();
         form.querySelector("#title").value = producto.title;
@@ -120,23 +119,26 @@ export default class ProductosView {
         }
     }
     // Función para manejar el botón "create"
-    handleCreate(saveButton) {
-        const form = document.getElementById("prods");
-        form.querySelector("#id").value = ""; // Limpia todo
-        form.querySelector("#title").value = "";
-        form.querySelector("#description").value = "";
-        form.querySelector("#price").value = "";
-        form.querySelector("#amount").value = "";
-        form.querySelector("#discountper").value = "";
-        form.querySelector("#discountuni").value = "";
-        form.querySelector("#discount").value = "false";
+    handleCreate(producto) {
+        console.log("Producto creado:", producto);
+        const saveButton = document.getElementById("save");
         saveButton.classList.remove("visually-hidden");
+        if (saveButton) {
+            saveButton.addEventListener("click", () => {
+                this.handleCreate1(); // Llama a handleCreate aquí
+            });
+        }
     }
     // Función para manejar el enlace "update"
     handleUpdate(id) {
         console.log(`Actualizando producto con ID: ${id}`);
         const saveButton = document.getElementById("save");
         saveButton.classList.remove("visually-hidden");
+        if (saveButton) {
+            saveButton.addEventListener("click", () => {
+                this.handleSave(); // Llama a handleCreate aquí
+            });
+        }
     }
     // Función para manejar el enlace "delete"
     handleDelete(id) {
@@ -187,5 +189,36 @@ export default class ProductosView {
         else {
             this.showErrorModal("Error: El ID o el título no son válidos.");
         }
+    }
+    handleCreate1() {
+        // Obtén los valores del formulario
+        const form = document.getElementById("prods");
+        // Asegúrate de que el formulario tiene los campos correctos
+        const idField = form.querySelector("#id");
+        const titleField = form.querySelector("#title");
+        const descriptionField = form.querySelector("#description");
+        const priceField = form.querySelector("#price");
+        const amountField = form.querySelector("#amount");
+        const discountPerField = form.querySelector("#discountper");
+        const discountUniField = form.querySelector("#discountuni");
+        const discountField = form.querySelector("#discount");
+        const favoriteField = form.querySelector("#favorite"); // Campo opcional para "favorite"
+        const imgField = form.querySelector("#img"); // Campo opcional para "img"
+        // Convierte los valores del formulario en un objeto Producto
+        const updatedProducto = {
+            id: parseInt(idField.value, 10),
+            title: titleField.value,
+            description: descriptionField.value,
+            price: parseFloat(priceField.value),
+            amount: amountField.value,
+            discountPer: parseFloat(discountPerField.value),
+            discountUni: discountUniField.value,
+            discount: discountField.value === "true",
+            favorite: favoriteField ? favoriteField.value === "true" : false,
+            img: imgField ? imgField.value : ""
+        };
+        console.log("Producto capturado:", updatedProducto);
+        this.onCreatedProduct(updatedProducto); // Llama a la función del controlador
+        return updatedProducto;
     }
 }
