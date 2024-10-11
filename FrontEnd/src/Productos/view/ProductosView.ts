@@ -165,7 +165,7 @@ export default class ProductosView {
                 this.onCreatedProduct(newProduct); // Llama al método de creación
             }
         };   
->>>>>>> e142e5e085fbaec2ce382c24019b46a6a47f62c3
+
     }
 
     // Cambiar en ProductosView
