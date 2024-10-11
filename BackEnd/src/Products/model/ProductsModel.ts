@@ -68,7 +68,7 @@ export default class ProductsModel {
       return 'Error al actualizar el producto';
     }
   }
-
+//a
   public async deleteProduct(idProducto: number): Promise<string> {
     try {
       // Leer el archivo JSON existente
