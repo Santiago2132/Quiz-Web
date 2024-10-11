@@ -123,6 +123,8 @@ export default class ProductosView {
         console.log("Producto creado:", producto);
         const saveButton = document.getElementById("save");
         saveButton.classList.remove("visually-hidden");
+        const idProducto = document.getElementById('id');
+        idProducto.readOnly = false;
         if (saveButton) {
             saveButton.addEventListener("click", () => {
                 this.handleCreate1(); // Llama a handleCreate aquí
